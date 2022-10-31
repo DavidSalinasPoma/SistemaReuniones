@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+// Ruta personalizada USUARIO
+Route::post('/api/register', [UserController::class, 'register']);
+
+
+// /*************RUTAS PARA USUARIOS********/
+// Utilizando rutas automatica usuario 
+Route::resource('/api/user', UserController::class);
