@@ -19,10 +19,17 @@ Route::get('/', function () {
 });
 
 
-// Ruta personalizada USUARIO
+// End Point REGISTRO DE USUARIO
 Route::post('/api/register', [UserController::class, 'register']);
 
+// End Point LOGIN
+Route::post('/api/login', [UserController::class, 'login']);
 
-// /*************RUTAS PARA USUARIOS********/
-// Utilizando rutas automatica usuario 
-Route::resource('/api/user', UserController::class);
+
+Route::group(['middleware' => ['api.auth']], function () {
+
+
+    // /*************RUTAS PARA USUARIOS********/
+    // Utilizando rutas automatica usuario 
+    Route::resource('/api/user', UserController::class);
+});

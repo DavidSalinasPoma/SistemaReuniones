@@ -95,7 +95,7 @@ class UserController extends Controller
 
             // Si la validacion pasa correctamente
             // 3.-Cifrar la contraseña
-            $pwd = bcrypt($params->password); // se cifra la contraseña 4 veces
+            $pwd = hash('sha256', $params->password); // se cifra la contraseña 4 veces
 
             // Crear el objeto usuario para guardar en la base de datos
             $user = new User();
@@ -132,7 +132,7 @@ class UserController extends Controller
 
         // 1.-Recoger los usuarios por post
         $params = (object) $request->all(); // Devulve un obejto
-        $paramsArray = $request->all(); // Devulve un obejto
+        $paramsArray = $request->all(); // Devulve un Array
 
         // 2.- Validar los datos recibidos por POST.
         $validate = Validator::make($paramsArray, [
@@ -178,7 +178,65 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // 2.- Recoger los datos por POST.
+        $paramsArray = $request->all(); // Devulve un Array
+
+        if (!empty($paramsArray)) {
+
+
+            // 3.- Validar datos recogidos por POST. pasando al getIdentity true
+            $validate = Validator::make($paramsArray, [
+
+                // 4.-el email ya existe duplicado
+                'email' => 'required|unique:users',
+                'password' => 'required',
+
+            ]);
+            // // Comprobar si los datos son validos
+            if ($validate->fails()) { // en caso si los datos fallan la validacion
+                // La validacion ha fallado
+                $data = array(
+                    'status' => 'Error',
+                    'code' => 400,
+                    'message' => 'Datos incorrectos no se puede actualizar',
+                    'errors' => $validate->errors()
+                );
+            } else {
+
+                // 4.- Quitar los campos que no quiero actualizar de la peticion.
+                unset($paramsArray['created_at']);
+
+                try {
+                    // 5.- Actualizar los datos en la base de datos.
+                    $user_update = User::where('id', $id)->update($paramsArray);
+
+                    // var_dump($user_update);
+                    // die();
+                    // 6.- Devolver el array con el resultado.
+                    $data = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'El usuario se ha modificado correctamente',
+                        'changes' => $paramsArray
+                    );
+                } catch (Exception $e) {
+                    $data = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'El usuario ya esta en uso.',
+                        // 'error' => $e
+                    );
+                }
+            }
+        } else {
+            $data = array(
+                'status' => 'Error',
+                'code' => 400,
+                'message' => 'El usuario no se esta identificado correctamente',
+            );
+        }
+
+        return response()->json($data, $data['code']);
     }
 
     /**
