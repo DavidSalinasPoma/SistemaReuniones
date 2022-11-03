@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReunionesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,4 +33,8 @@ Route::group(['middleware' => ['api.auth']], function () {
     // /*************RUTAS PARA USUARIOS********/
     // Utilizando rutas automatica usuario 
     Route::resource('/api/user', UserController::class);
+
+    // /*************RUTAS PARA USUARIOS********/
+    // Utilizando rutas automatica usuario 
+    Route::resource('/api/reuniones', ReunionesController::class);
 });

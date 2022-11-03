@@ -33,7 +33,7 @@ class ApiAuthMiddleware
             $data = array(
                 'status' => 'Error',
                 'code' => 400,
-                'message' => 'El usuario no se esta identificado(middleware)'
+                'message' => 'No tienes autorización para usar servicios de esta aplicación.'
             );
             return response()->json($data, $data['code']);
         }

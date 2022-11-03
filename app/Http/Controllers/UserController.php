@@ -205,6 +205,8 @@ class UserController extends Controller
 
                 // 4.- Quitar los campos que no quiero actualizar de la peticion.
                 unset($paramsArray['created_at']);
+                $pwd = hash('sha256', $paramsArray['password']); // se cifra la contraseña 4 veces
+                $paramsArray['password'] = $pwd;
 
                 try {
                     // 5.- Actualizar los datos en la base de datos.

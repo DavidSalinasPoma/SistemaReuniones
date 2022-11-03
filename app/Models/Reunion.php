@@ -10,7 +10,7 @@ class Reunion extends Model
     use HasFactory;
 
     // 1.- indicamos la tabla que va a utilizar de la base de datos
-    protected $table = 'reuniones';
+    protected $table = 'reunions';
 
 
     // relacion de muchos a uno inversa(muchos a uno)
