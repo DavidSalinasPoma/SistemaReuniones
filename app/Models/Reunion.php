@@ -16,6 +16,6 @@ class Reunion extends Model
     // relacion de muchos a uno inversa(muchos a uno)
     public function user()
     {
-        return $this->belongsTo('App\Models\Users', 'usuarios_id'); // Recibe a users
+        return $this->belongsTo('App\Models\User', 'usuarios_id'); // Recibe a users
     }
 }

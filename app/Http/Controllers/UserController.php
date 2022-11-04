@@ -188,7 +188,7 @@ class UserController extends Controller
             $validate = Validator::make($paramsArray, [
 
                 // 4.-el email ya existe duplicado
-                'email' => 'required|unique:users',
+                'email' => 'required|email|unique:users,email',
                 'password' => 'required',
 
             ]);

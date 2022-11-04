@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reunion;
+use App\Models\Role;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -43,7 +44,7 @@ class ReunionesController extends Controller
 
         // 2.-Validar datos
         $validate = Validator::make($request->all(), [
-            'motivo' => 'required|motivo|unique:users',
+            'motivo' => 'required|unique:reunions',
             'asunto' => 'required',
             'prioridad' => 'required',
             'fecha_reunion' => 'required',
@@ -131,8 +132,83 @@ class ReunionesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        // Validar el campo motivo UNIQUE en una actualización
+        $reunion = Reunion::find($id);
+
+        if (!empty($reunion)) {
+
+            // llaves unicas
+            $motivo = $reunion->motivo;
+
+            // Actualizar Usuario.
+            // 1.- Validar datos recogidos por POST. pasando al getIdentity true
+            $validate = Validator::make($request->all(), [
+                // Validar lo que se va actualizar
+                'motivo' => 'required',
+                'asunto' => 'required',
+                'prioridad' => 'required',
+                'fecha_reunion' => 'required',
+                'estado' => 'required'
+            ]);
+
+            // 2.-Recoger los usuarios por post
+            $params = (object) $request->all(); // Devuelve un obejto
+            $paramsArray = $request->all(); // Es un array
+
+            // // Comprobar si los datos son validos
+            if ($validate->fails()) { // en caso si los datos fallan la validacion
+                // La validacion ha fallado
+                $data = array(
+                    'status' => 'Error',
+                    'code' => 400,
+                    'message' => 'Datos incorrectos no se puede actualizar',
+                    'errors' => $validate->errors()
+                );
+            } else {
+                // echo $carnet;
+                // echo $paramsArray['carnet'];
+                // die();
+                if ($motivo == $paramsArray['motivo']) {
+                    unset($paramsArray['motivo']);
+                }
+
+                // 4.- Quitar los campos que no quiero actualizar de la peticion.
+                unset($paramsArray['created_at']);
+
+                try {
+                    // 5.- Actualizar los datos en la base de datos.
+                    Reunion::where('id', $id)->update($paramsArray);
+
+                    // 6.- Devolver el array con el resultado.
+                    $data = array(
+                        'status' => 'Succes',
+                        'code' => 200,
+                        'message' => 'La reunión se ha modificado correctamente',
+                        'reunion' => $reunion,
+                        'changes' => $paramsArray
+                    );
+                } catch (Exception $e) {
+                    $data = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'No se hizo la modificación, Este registro, con este MOTIVO ya existe',
+                        'error' => $e
+                    );
+                }
+            }
+            return response()->json($data, $data['code']);
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Esta registro de reunión no existe.',
+                // 'error' => $e
+            );
+            return response()->json($data, $data['code']);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -142,6 +218,34 @@ class ReunionesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $reunion = Reunion::find($id);
+
+        $paramsArray = array(
+            'estado' => 0
+        );
+
+        try {
+            // 5.- Actualizar los datos en la base de datos.
+            Reunion::where('id', $id)->update($paramsArray);
+
+            // 6.- Devolver el array con el resultado.
+            $data = array(
+                'status' => 'Succes',
+                'code' => 200,
+                'message' => 'La reunión ha sido dado de baja correctamente',
+                'reunion' => $reunion,
+                'changes' => $paramsArray
+            );
+        } catch (Exception $e) {
+            $data = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'La reunión no ha sido dado de baja',
+                'error' => $e
+
+            );
+        }
+
+        return response()->json($data, $data['code']);
     }
 }

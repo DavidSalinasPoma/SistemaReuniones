@@ -15,7 +15,7 @@ class CreateReunionsTable extends Migration
     {
         Schema::create('reunions', function (Blueprint $table) {
             $table->id();
-            $table->text('motivo');
+            $table->text('motivo')->unique();;
             $table->text('asunto');
             $table->string('prioridad');
             $table->string('fecha_reunion');
