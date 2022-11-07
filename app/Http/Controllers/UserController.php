@@ -165,6 +165,7 @@ class UserController extends Controller
                 $singup = $jwtauth->singup($params->email, $pwd, true); // Token decodificado en un objeto.
             }
         }
+        // Respuesta si el login es valido y si es valido devuelve el token decodificado
         return response()->json($singup, 200);
     }
 

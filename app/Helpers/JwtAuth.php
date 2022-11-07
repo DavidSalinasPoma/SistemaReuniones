@@ -79,7 +79,10 @@ class JwtAuth
 
             // 4.- Devolver los datos decodificados o el token, en funcion de un parametro.
             if (is_null($getToken)) {
-                $data = $jwt;
+                $data = array(
+                    'token' => $jwt,
+                    'identity' => $decode
+                );
             } else {
                 $data = $decode; //Muestra los datos decodificados si recive TRUE
             }
@@ -89,7 +92,6 @@ class JwtAuth
                 'message' => 'Login incorrecto'
             );
         }
-
         return $data;
     }
 
