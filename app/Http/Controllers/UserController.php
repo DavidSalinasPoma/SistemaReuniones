@@ -85,7 +85,7 @@ class UserController extends Controller
         if ($validate->fails()) { // en caso si los datos fallan la validacion
             // La validacion ha fallado
             $data = array(
-                'status' => 'Error',
+                'status' => 'error',
                 'code' => 400,
                 'message' => 'Los datos enviados no son correctos',
                 'user' => $request->all(),
@@ -115,7 +115,7 @@ class UserController extends Controller
                 );
             } catch (Exception $e) {
                 $data = array(
-                    'status' => 'Error',
+                    'status' => 'error',
                     'code' => 404,
                     'message' => $e
                 );
@@ -144,7 +144,7 @@ class UserController extends Controller
         if ($validate->fails()) { // en caso si los datos fallan la validacion
             // La validacion ha fallado
             $singup = array(
-                'status' => 'Error',
+                'status' => 'error',
                 'code' => 404,
                 'message' => 'El usuario no se ha podido identificar Faltan datos',
                 'errors' => $validate->errors()
@@ -197,7 +197,7 @@ class UserController extends Controller
             if ($validate->fails()) { // en caso si los datos fallan la validacion
                 // La validacion ha fallado
                 $data = array(
-                    'status' => 'Error',
+                    'status' => 'error',
                     'code' => 400,
                     'message' => 'Datos incorrectos no se puede actualizar',
                     'errors' => $validate->errors()
@@ -233,7 +233,7 @@ class UserController extends Controller
             }
         } else {
             $data = array(
-                'status' => 'Error',
+                'status' => 'error',
                 'code' => 400,
                 'message' => 'El usuario no se esta identificado correctamente',
             );
