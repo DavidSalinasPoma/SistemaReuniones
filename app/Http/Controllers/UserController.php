@@ -22,7 +22,7 @@ class UserController extends Controller
         $data = array(
             'code' => 200,
             'status' => 'success',
-            'usuario' => $user
+            'usuarios' => $user
         );
         return response()->json($data, $data['code']);
     }

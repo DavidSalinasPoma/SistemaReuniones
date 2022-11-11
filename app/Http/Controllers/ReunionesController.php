@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Reunion;
 use App\Models\Role;
 use Exception;
@@ -23,7 +24,7 @@ class ReunionesController extends Controller
         $data = array(
             'code' => 200,
             'status' => 'success',
-            'reunion' => $reunion
+            'reuniones' => $reunion
         );
         return response()->json($data, $data['code']);
     }
@@ -54,7 +55,6 @@ class ReunionesController extends Controller
         // Comprobar si los datos son validos
         if ($validate->fails()) { // en caso si los datos fallan la validacion
             // La validacion ha fallado
-            echo 'Hola Mundo';
             $data = array(
                 'status' => 'Error',
                 'code' => 400,
@@ -70,6 +70,7 @@ class ReunionesController extends Controller
             $reunion->motivo = $params->motivo;
             $reunion->asunto = $params->asunto;
             $reunion->prioridad = $params->prioridad;
+
             $reunion->fecha_reunion = $params->fecha_reunion;
             $reunion->usuarios_id = $params->usuarios_id;
 
@@ -86,7 +87,7 @@ class ReunionesController extends Controller
                 );
             } catch (Exception $e) {
                 $data = array(
-                    'status' => 'err',
+                    'status' => 'error',
                     'code' => 400,
                     'message' => 'No se pudo crear la reunion, intente nuevamente',
                     'error' => $e
@@ -230,7 +231,7 @@ class ReunionesController extends Controller
 
             // 6.- Devolver el array con el resultado.
             $data = array(
-                'status' => 'Succes',
+                'status' => 'success',
                 'code' => 200,
                 'message' => 'La reunión ha sido dado de baja correctamente',
                 'reunion' => $reunion,

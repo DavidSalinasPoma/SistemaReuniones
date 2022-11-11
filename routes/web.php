@@ -29,7 +29,6 @@ Route::post('/api/login', [UserController::class, 'login']);
 
 Route::group(['middleware' => ['api.auth']], function () {
 
-
     // /*************RUTAS PARA USUARIOS********/
     // Utilizando rutas automatica usuario 
     Route::resource('/api/user', UserController::class);
