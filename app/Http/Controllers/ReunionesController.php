@@ -7,6 +7,7 @@ use App\Models\Reunion;
 use App\Models\Role;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ReunionesController extends Controller
@@ -247,6 +248,35 @@ class ReunionesController extends Controller
             );
         }
 
+        return response()->json($data, $data['code']);
+    }
+
+    // Buscar Usuario
+    public function buscarReuniones(Request $request)
+    {
+        $params = (object) $request->all(); // Devuelve un obejto
+        $texto = $params->motivo;
+
+        try {
+
+            $reuniones = Reunion::with('user')->where('motivo', 'LIKE', '%' . $texto . '%')
+                ->get();
+
+            $data = array(
+                'status' => 'success',
+                'code' => 200,
+                'reuniones' => $reuniones,
+                'texto' => $texto
+            );
+        } catch (Exception $e) {
+            $data = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'No puede buscar',
+                'error' => $e,
+            );
+        }
+        // Devuelve en json con laravel
         return response()->json($data, $data['code']);
     }
 }

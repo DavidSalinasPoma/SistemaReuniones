@@ -36,4 +36,5 @@ Route::group(['middleware' => ['api.auth']], function () {
     // /*************RUTAS PARA USUARIOS********/
     // Utilizando rutas automatica usuario 
     Route::resource('/api/reuniones', ReunionesController::class);
+    Route::post('/api/reuniones/buscarReuniones', [ReunionesController::class, 'buscarReuniones']);
 });

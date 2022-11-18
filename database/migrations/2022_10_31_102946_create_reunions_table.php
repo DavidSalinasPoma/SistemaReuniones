@@ -18,7 +18,7 @@ class CreateReunionsTable extends Migration
             $table->text('motivo')->unique();;
             $table->text('asunto');
             $table->string('prioridad');
-            $table->string('fecha_reunion');
+            $table->date('fecha_reunion');
             $table->integer('estado')->default(1);
             $table->foreignId('usuarios_id')->constrained('users')->onUpdate('cascade')->onDelete('restrict');
             $table->integer('estado_reunion')->default(0);
