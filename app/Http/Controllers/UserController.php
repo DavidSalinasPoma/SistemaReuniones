@@ -35,7 +35,64 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 1.-Recoger los usuarios por post
+        $params = (object) $request->all(); // Devulve un obejto
+
+
+        // 2.-Validar datos
+        $validate = Validator::make($request->all(), [
+            'nombres' => 'required',
+            'apellidos' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+            'rol' => 'required',
+            'descripcion' => 'required',
+        ]);
+
+        // Comprobar si los datos son validos
+        if ($validate->fails()) { // en caso si los datos fallan la validacion
+            // La validacion ha fallado
+            $data = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Los datos enviados no son correctos',
+                'user' => $request->all(),
+                'errors' => $validate->errors()
+            );
+        } else {
+
+            // Si la validacion pasa correctamente
+            // 3.-Cifrar la contraseña
+            $pwd = hash('sha256', $params->password); // se cifra la contraseña 4 veces
+
+            // Crear el objeto usuario para guardar en la base de datos
+            $user = new User();
+            $user->nombres = $params->nombres;
+            $user->apellidos = $params->apellidos;
+            $user->email = $params->email;
+            $user->password = $pwd;
+            $user->rol = $params->rol;
+            $user->descripcion = $params->descripcion;
+            try {
+                // 5.-Crear el usuario
+                $user->save();
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'El usuario se ha creado correctamente',
+                    'usuario' => $user
+                );
+            } catch (Exception $e) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => $e
+                );
+            }
+        }
+
+        // Devuelve en json con laravel
+        return response()->json($data, $data['code']);
     }
 
     /**
@@ -78,6 +135,7 @@ class UserController extends Controller
             'nombres' => 'required',
             'apellidos' => 'required',
             'email' => 'required|email|unique:users,email',
+            'rol' => 'required',
             'password' => 'required',
         ]);
 
@@ -103,6 +161,7 @@ class UserController extends Controller
             $user->apellidos = $params->apellidos;
             $user->email = $params->email;
             $user->password = $pwd;
+            $user->rol = $params->rol;
             $user->descripcion = $params->descripcion;
             try {
                 // 5.-Crear el usuario

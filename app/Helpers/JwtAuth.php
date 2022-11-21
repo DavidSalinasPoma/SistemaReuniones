@@ -62,6 +62,7 @@ class JwtAuth
                 'apellidos' => $user->apellidos,
                 'email' => $user->email,
                 'estado' => $user->estado,
+                'rol' => $user->rol,
                 // Fecha que se creo el token
                 'iat' => time(),
                 // fecha que caduca el toque(una semana)

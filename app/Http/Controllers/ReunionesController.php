@@ -255,11 +255,11 @@ class ReunionesController extends Controller
     public function buscarReuniones(Request $request)
     {
         $params = (object) $request->all(); // Devuelve un obejto
-        $texto = $params->motivo;
+        $texto = $params->fechaInicio;
 
         try {
 
-            $reuniones = Reunion::with('user')->where('motivo', 'LIKE', '%' . $texto . '%')
+            $reuniones = Reunion::with('user')->where('motivo', 'ilike', ["%{$texto}%"])
                 ->get();
 
             $data = array(
@@ -278,5 +278,48 @@ class ReunionesController extends Controller
         }
         // Devuelve en json con laravel
         return response()->json($data, $data['code']);
+    }
+
+    public function buscarReunionesFechas(Request $request)
+    {
+        $params = (object) $request->all(); // Devuelve un obejto
+        $fechainicio = $params->fechainicio;
+        $fechafin = $params->fechafin;
+
+        $dateinicio = date($fechainicio);
+        $datefinal = date($fechafin);
+
+
+        if ($dateinicio <= $datefinal) {
+            try {
+
+                $reuniones = Reunion::with('user')->whereBetween('fecha_reunion', [$fechainicio, $fechafin])
+                    ->get();
+
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'reuniones' => $reuniones,
+                    'fechainicio' => $fechainicio,
+                    'fechafin' => $fechafin
+                );
+            } catch (Exception $e) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No puede buscar',
+                    'error' => $e,
+                );
+            }
+            // Devuelve en json con laravel
+            return response()->json($data, $data['code']);
+        } else {
+            $data = array(
+                'status' => 'errorfechas',
+                'code' => 400,
+                'message' => 'Rango de fechas invalido..!',
+            );
+            return response()->json($data, $data['code']);
+        }
     }
 }
