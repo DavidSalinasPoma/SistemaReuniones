@@ -309,6 +309,105 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $usuario = User::find($id); // Trae el usuario en formato JSON
+
+        if (!empty($usuario)) {
+            $paramsArray = json_decode($usuario, true); // devuelve un array
+            // var_dump($paramsArray);
+            // die();
+
+            // Quitar los campos que no quiero actualizar de la peticion.
+            unset($paramsArray['id']);
+            unset($paramsArray['email']);
+            unset($paramsArray['descripcion']);
+            unset($paramsArray['created_at']);
+            unset($paramsArray['updated_at']);
+
+            // Campo stado a modificar
+            $paramsArray['estado'] = 0;
+
+            try {
+                // 5.- Actualizar los datos en la base de datos.
+                $user_update = User::where('id', $id)->update($paramsArray);
+
+                // 6.- Devolver el array con el resultado.
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'El usuario ha sido dado de baja correctamente',
+                    'usuario' => $usuario,
+                    'changes' => $paramsArray
+                );
+            } catch (Exception $e) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El usuario no ha sido dado de baja',
+
+                );
+            }
+
+            return response()->json($data, $data['code']);
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Este usuario no existe.',
+                // 'error' => $e
+            );
+            return response()->json($data, $data['code']);
+        }
+    }
+
+    public function altaUsuario($id)
+    {
+        $usuario = User::find($id); // Trae el usuario en formato JSON
+
+        if (!empty($usuario)) {
+            $paramsArray = json_decode($usuario, true); // devuelve un array
+            // var_dump($paramsArray);
+            // die();
+
+            // Quitar los campos que no quiero actualizar de la peticion.
+            unset($paramsArray['id']);
+            unset($paramsArray['email']);
+            unset($paramsArray['descripcion']);
+            unset($paramsArray['created_at']);
+            unset($paramsArray['updated_at']);
+
+            // Campo stado a modificar
+            $paramsArray['estado'] = 1;
+
+            try {
+                // 5.- Actualizar los datos en la base de datos.
+                $user_update = User::where('id', $id)->update($paramsArray);
+
+                // 6.- Devolver el array con el resultado.
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'El usuario ha sido dado de alta correctamente',
+                    'usuario' => $usuario,
+                    'changes' => $paramsArray
+                );
+            } catch (Exception $e) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El usuario no ha sido dado de alta',
+
+                );
+            }
+
+            return response()->json($data, $data['code']);
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Este usuario no existe.',
+                // 'error' => $e
+            );
+            return response()->json($data, $data['code']);
+        }
     }
 }

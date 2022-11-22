@@ -32,6 +32,7 @@ Route::group(['middleware' => ['api.auth']], function () {
     // /*************RUTAS PARA USUARIOS********/
     // Utilizando rutas automatica usuario 
     Route::resource('/api/user', UserController::class);
+    Route::delete('/api/user/altausuario/{id}', [UserController::class, 'altaUsuario']);
 
     // /*************RUTAS PARA USUARIOS********/
     // Utilizando rutas automatica usuario 
