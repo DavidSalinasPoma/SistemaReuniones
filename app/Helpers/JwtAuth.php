@@ -35,12 +35,12 @@ class JwtAuth
     }
 
     // Metodo que genera un tokem 
-    public function singup($email, $password, $getToken = null)
+    public function singup($usuario, $password, $getToken = null)
     {
         // 1.- Buscar si existe el usuario con sus credenciales en la base de datos
         $user = User::where([ // guarda en un objeto
             // Comprobar si existe un asuario y password con el nom_usuario q se le esta pasando
-            'email' => $email,
+            'usuario' => $usuario,
             'password' => $password
             // luego sacar datos de la consulta con first()
         ])->first(); // Saca el dato que coninsida
@@ -60,7 +60,7 @@ class JwtAuth
                 'sub' => $user->id,
                 'nombres' => $user->nombres,
                 'apellidos' => $user->apellidos,
-                'email' => $user->email,
+                'usuario' => $user->usuario,
                 'estado' => $user->estado,
                 'rol' => $user->rol,
                 // Fecha que se creo el token

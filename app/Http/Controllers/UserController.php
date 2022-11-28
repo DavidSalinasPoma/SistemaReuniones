@@ -43,7 +43,7 @@ class UserController extends Controller
         $validate = Validator::make($request->all(), [
             'nombres' => 'required',
             'apellidos' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'usuario' => 'required',
             'password' => 'required',
             'rol' => 'required',
             'descripcion' => 'required',
@@ -69,7 +69,7 @@ class UserController extends Controller
             $user = new User();
             $user->nombres = $params->nombres;
             $user->apellidos = $params->apellidos;
-            $user->email = $params->email;
+            $user->usuario = $params->usuario;
             $user->password = $pwd;
             $user->rol = $params->rol;
             $user->descripcion = $params->descripcion;
@@ -134,7 +134,7 @@ class UserController extends Controller
         $validate = Validator::make($request->all(), [
             'nombres' => 'required',
             'apellidos' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'usuario' => 'required',
             'rol' => 'required',
             'password' => 'required',
         ]);
@@ -159,7 +159,7 @@ class UserController extends Controller
             $user = new User();
             $user->nombres = $params->nombres;
             $user->apellidos = $params->apellidos;
-            $user->email = $params->email;
+            $user->usuario = $params->usuario;
             $user->password = $pwd;
             $user->rol = $params->rol;
             $user->descripcion = $params->descripcion;
@@ -196,7 +196,7 @@ class UserController extends Controller
         // 2.- Validar los datos recibidos por POST.
         $validate = Validator::make($paramsArray, [
             // 4.-Comprobar si el usuario ya existe duplicado
-            'email' => 'required',
+            'usuario' => 'required',
             'password' => 'required',
         ]);
         // Comprobar si los datos son validos
@@ -218,10 +218,10 @@ class UserController extends Controller
             // Este token sera el que recibiremos con el cliente y pasaremos a cada una de las peticines
             // http que realizemos a ciertos metodos de nuestra api, el API lo recibira y procesara el token
             // comprobara si es correcto. y si lo es me dejara entrar y si no lo es no lo hara.
-            $singup = $jwtauth->singup($params->email, $pwd); // Por defecto token codificado.
+            $singup = $jwtauth->singup($params->usuario, $pwd); // Por defecto token codificado.
 
             if (!empty($params->getToken)) { // si existe y no esta vacio y no es NULL.
-                $singup = $jwtauth->singup($params->email, $pwd, true); // Token decodificado en un objeto.
+                $singup = $jwtauth->singup($params->usuario, $pwd, true); // Token decodificado en un objeto.
             }
         }
         // Respuesta si el login es valido y si es valido devuelve el token decodificado
@@ -248,7 +248,7 @@ class UserController extends Controller
             $validate = Validator::make($paramsArray, [
 
                 // 4.-el email ya existe duplicado
-                'email' => 'required|email|unique:users,email',
+                'usuario' => 'required',
                 'password' => 'required',
 
             ]);
@@ -318,7 +318,7 @@ class UserController extends Controller
 
             // Quitar los campos que no quiero actualizar de la peticion.
             unset($paramsArray['id']);
-            unset($paramsArray['email']);
+            unset($paramsArray['usuario']);
             unset($paramsArray['descripcion']);
             unset($paramsArray['created_at']);
             unset($paramsArray['updated_at']);
@@ -370,7 +370,7 @@ class UserController extends Controller
 
             // Quitar los campos que no quiero actualizar de la peticion.
             unset($paramsArray['id']);
-            unset($paramsArray['email']);
+            unset($paramsArray['usuario']);
             unset($paramsArray['descripcion']);
             unset($paramsArray['created_at']);
             unset($paramsArray['updated_at']);

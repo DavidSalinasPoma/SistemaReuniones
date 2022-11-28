@@ -19,7 +19,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 // End Point REGISTRO DE USUARIO
 Route::post('/api/register', [UserController::class, 'register']);
 

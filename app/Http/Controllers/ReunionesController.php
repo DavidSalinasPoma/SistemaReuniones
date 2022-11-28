@@ -51,6 +51,7 @@ class ReunionesController extends Controller
             'prioridad' => 'required',
             'fecha_reunion' => 'required',
             'usuarios_id' => 'required',
+
         ]);
 
         // Comprobar si los datos son validos
@@ -72,7 +73,7 @@ class ReunionesController extends Controller
             $reunion->asunto = $params->asunto;
             $reunion->prioridad = $params->prioridad;
 
-            $reunion->fecha_reunion = $params->fecha_reunion;
+            $reunion->fecha_reunion = date($params->fecha_reunion);
             $reunion->usuarios_id = $params->usuarios_id;
 
             try {
@@ -184,7 +185,7 @@ class ReunionesController extends Controller
 
                     // 6.- Devolver el array con el resultado.
                     $data = array(
-                        'status' => 'Succes',
+                        'status' => 'success',
                         'code' => 200,
                         'message' => 'La reunión se ha modificado correctamente',
                         'reunion' => $reunion,
@@ -255,7 +256,7 @@ class ReunionesController extends Controller
     public function buscarReuniones(Request $request)
     {
         $params = (object) $request->all(); // Devuelve un obejto
-        $texto = $params->fechaInicio;
+        $texto = $params->motivo;
 
         try {
 

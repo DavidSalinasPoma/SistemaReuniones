@@ -18,7 +18,7 @@ class UsuariosSeeder extends Seeder
         $user = new User();
         $user->nombres = "David";
         $user->apellidos = "Salinas Poma";
-        $user->email = "d@gmail.com";
+        $user->usuario = "d@gmail.com";
         $user->password = "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e";
         $user->estado = 1;
         $user->rol = 1;
@@ -29,7 +29,7 @@ class UsuariosSeeder extends Seeder
         $user = new User();
         $user->nombres = "Rodrigo";
         $user->apellidos = "Pinto Crispin";
-        $user->email = "pinto@gmail.com";
+        $user->usuario = "pinto@gmail.com";
         $user->password = "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e";
         $user->estado = 1;
         $user->rol = 0;
